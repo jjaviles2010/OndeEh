@@ -4,12 +4,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableField
 import com.JLApps.ondeeh.R
 import com.JLApps.ondeeh.base.BaseActivity
+import com.JLApps.ondeeh.databinding.ActivityMainBinding
 import com.JLApps.ondeeh.model.Endereco
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity<MainPresenter>(), MainView {
+
+    private val loading = ObservableBoolean()
 
     private fun exibeAlerta(mensagem: String) {
         Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show()
@@ -22,11 +28,11 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
     }
 
     override fun showLoading() {
-        pbLoading.visibility = View.VISIBLE
+        loading.set(true)
     }
 
     override fun hideLoading() {
-        pbLoading.visibility = View.GONE
+        loading.set(false)
     }
 
     override fun exibeErro(mensagem: String) {
@@ -39,10 +45,12 @@ class MainActivity : BaseActivity<MainPresenter>(), MainView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+//        setContentView(R.layout.activity_main)
+        val binding: ActivityMainBinding = DataBindingUtil.setContentView(
+            this, R.layout.activity_main
+        )
 
-        btPesquisar.setOnClickListener {
-            presenter.buscarEndereco(inputCep.text.toString())
-        }
+        binding.presenter = presenter
+        binding.loading = loading
     }
 }

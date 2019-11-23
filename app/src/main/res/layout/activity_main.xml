@@ -1,85 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main.MainActivity">
+<layout>
 
-    <EditText
-        android:id="@+id/inputCep"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:hint="Informe o cep"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+    <data>
 
-    <Button
-        android:id="@+id/btPesquisar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Pesquisar"
-        app:layout_constraintEnd_toEndOf="@+id/inputCep"
-        app:layout_constraintStart_toStartOf="@+id/inputCep"
-        app:layout_constraintTop_toBottomOf="@+id/inputCep"/>
+        <import type="android.view.View"/>
+        <variable
+            name="loading"
+            type="androidx.databinding.ObservableBoolean" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Resultado da Pesquisa"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/btPesquisar"
-        app:layout_constraintStart_toStartOf="@+id/btPesquisar"
-        app:layout_constraintTop_toBottomOf="@+id/btPesquisar"/>
+        <variable name="cep" type="String"/>
 
-    <TextView
-        android:id="@+id/tvLogradouro"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/btPesquisar"
-        app:layout_constraintStart_toStartOf="@+id/btPesquisar"
-        app:layout_constraintTop_toBottomOf="@+id/textView"/>
+        <variable name="presenter"
+            type="com.JLApps.ondeeh.ui.main.MainPresenter"/>
+    </data>
 
-    <TextView
-        android:id="@+id/tvBairro"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/tvLogradouro"
-        app:layout_constraintStart_toStartOf="@+id/tvLogradouro"
-        app:layout_constraintTop_toBottomOf="@+id/tvLogradouro"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.main.MainActivity">
 
-    <TextView
-        android:id="@+id/tvUF"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/tvBairro"
-        app:layout_constraintStart_toStartOf="@+id/tvBairro"
-        app:layout_constraintTop_toBottomOf="@+id/tvBairro"/>
+        <EditText
+            android:id="@+id/inputCep"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Informe o cep"
+            android:text="@={cep}"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-    <ProgressBar
-        android:id="@+id/pbLoading"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:onClick="@{() -> presenter.buscarEndereco(cep)}"
+            android:id="@+id/btPesquisar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Pesquisar"
+            app:layout_constraintEnd_toEndOf="@+id/inputCep"
+            app:layout_constraintStart_toStartOf="@+id/inputCep"
+            app:layout_constraintTop_toBottomOf="@+id/inputCep"/>
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Resultado da Pesquisa"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/btPesquisar"
+            app:layout_constraintStart_toStartOf="@+id/btPesquisar"
+            app:layout_constraintTop_toBottomOf="@+id/btPesquisar"/>
+
+        <TextView
+            android:visibility="@{loading ? View.GONE : View.VISIBLE}"
+            android:id="@+id/tvLogradouro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/btPesquisar"
+            app:layout_constraintStart_toStartOf="@+id/btPesquisar"
+            app:layout_constraintTop_toBottomOf="@+id/textView"/>
+
+        <TextView
+            android:visibility="@{loading ? View.GONE : View.VISIBLE}"
+            android:id="@+id/tvBairro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/tvLogradouro"
+            app:layout_constraintStart_toStartOf="@+id/tvLogradouro"
+            app:layout_constraintTop_toBottomOf="@+id/tvLogradouro"/>
+
+        <TextView
+            android:visibility="@{loading ? View.GONE : View.VISIBLE}"
+            android:id="@+id/tvUF"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/tvBairro"
+            app:layout_constraintStart_toStartOf="@+id/tvBairro"
+            app:layout_constraintTop_toBottomOf="@+id/tvBairro"/>
+
+        <ProgressBar
+            android:id="@+id/pbLoading"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="@{loading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
 
 
 
